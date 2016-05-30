@@ -15,5 +15,5 @@ El Entity SQL es un lenguaje similar al SQL para consultar el Entity Data Model 
 
 Se requeriere las siguientes herramientas:
 
-Visual Studio Community 2015
-Sql Server Express 2014
+- Visual Studio Community 2015
+- Sql Server Express 2014
