@@ -1,6 +1,6 @@
 #Basic EF Model Semop
 
-Proyecto Semop usando la tecnología ADO.NET Entity Data Model  y ADO.NET MVC 4. Este proyecto es usado en el curso de capacitación e introducción Entity Framework Basic
+Proyecto Semop usando la tecnología ADO.NET Entity Framework Model First  y ADO.NET MVC 4. Este proyecto es usado en el curso de capacitación e introducción Entity Framework Basic
 
 ##Introducción
 
