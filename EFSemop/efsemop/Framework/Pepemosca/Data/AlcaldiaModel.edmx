@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AlcaldiaModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="AlcaldiaModelStoreContainer">
+    <EntitySet Name="Personas" EntityType="AlcaldiaModel.Store.Personas" store:Type="Tables" Schema="core" />
+    <EntitySet Name="SubAlcaldias" EntityType="AlcaldiaModel.Store.SubAlcaldias" store:Type="Tables" Schema="core" />
+    <EntitySet Name="Personas_Responsable" EntityType="AlcaldiaModel.Store.Personas_Responsable" store:Type="Tables" Schema="core" />
+    <AssociationSet Name="FK_Responsable_inherits_Persona" Association="AlcaldiaModel.Store.FK_Responsable_inherits_Persona">
+      <End Role="Persona" EntitySet="Personas" />
+      <End Role="Responsable" EntitySet="Personas_Responsable" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Personas">
+    <Key>
+      <PropertyRef Name="IdPersona" />
+    </Key>
+    <Property Name="IdPersona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombres" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Apellidos" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="SubAlcaldias">
+    <Key>
+      <PropertyRef Name="IdSubAlcaldia" />
+    </Key>
+    <Property Name="IdSubAlcaldia" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Direccion" Type="nvarchar" Nullable="false" MaxLength="500" />
+    <Property Name="Zona" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Telefono" Type="varchar" Nullable="true" MaxLength="20" />
+    <Property Name="NombreSubAlcalde" Type="nvarchar" Nullable="true" MaxLength="80" />
+  </EntityType>
+  <EntityType Name="Personas_Responsable">
+    <Key>
+      <PropertyRef Name="IdPersona" />
+    </Key>
+    <Property Name="FechaAsignacion" Type="datetime" Nullable="false" />
+    <Property Name="IdPersona" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Responsable_inherits_Persona">
+    <End Role="Persona" Type="AlcaldiaModel.Store.Personas" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Responsable" Type="AlcaldiaModel.Store.Personas_Responsable" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Persona">
+        <PropertyRef Name="IdPersona" />
+      </Principal>
+      <Dependent Role="Responsable">
+        <PropertyRef Name="IdPersona" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="AlcaldiaModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="AlcaldiaModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Personas" EntityType="AlcaldiaModel.Persona" />
+          <EntitySet Name="SubAlcaldias" EntityType="AlcaldiaModel.SubAlcaldia" />
+        </EntityContainer>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombres" Type="String" Nullable="false" MaxLength="50" Unicode="true" />
+          <Property Name="Apellidos" Type="String" Nullable="false" Unicode="true" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Responsable" BaseType="AlcaldiaModel.Persona">
+          <Property Name="FechaAsignacion" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubAlcaldia">
+          <Key>
+            <PropertyRef Name="IdSubAlcaldia" />
+          </Key>
+          <Property Name="IdSubAlcaldia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" Unicode="true" MaxLength="50" />
+          <Property Name="Direccion" Type="String" Nullable="false" Unicode="true" MaxLength="500" />
+          <Property Name="Zona" Type="String" Nullable="false" Unicode="true" MaxLength="200" />
+          <Property Name="Telefono" Type="String" MaxLength="20" Nullable="true" Unicode="false" />
+          <Property Name="NombreSubAlcalde" Type="String" Unicode="true" Nullable="true" MaxLength="80" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AlcaldiaModelStoreContainer" CdmEntityContainer="AlcaldiaModelContainer">
+    <EntitySetMapping Name="Personas">
+      <EntityTypeMapping TypeName="IsTypeOf(AlcaldiaModel.Persona)">
+        <MappingFragment StoreEntitySet="Personas">
+          <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+          <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+          <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(AlcaldiaModel.Responsable)">
+        <MappingFragment StoreEntitySet="Personas_Responsable">
+          <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+          <ScalarProperty Name="FechaAsignacion" ColumnName="FechaAsignacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubAlcaldias">
+      <EntityTypeMapping TypeName="IsTypeOf(AlcaldiaModel.SubAlcaldia)">
+        <MappingFragment StoreEntitySet="SubAlcaldias">
+          <ScalarProperty Name="IdSubAlcaldia" ColumnName="IdSubAlcaldia" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+          <ScalarProperty Name="Zona" ColumnName="Zona" />
+          <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+          <ScalarProperty Name="NombreSubAlcalde" ColumnName="NombreSubAlcalde" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="DefaultDatabaseSchema" Value="core" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
