@@ -16,3 +16,7 @@ textarea {
     max-width: 280px;
 }
 
+.spacer-component {
+    padding-bottom: 15px;
+}
+
