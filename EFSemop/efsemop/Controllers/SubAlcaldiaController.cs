@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity.Infrastructure;
 using efsemop.Framework.Pepemosca.Data;
+using efsemop.Models.ViewModels.SubAlcaldia;
 
 namespace efsemop.Controllers
 {
@@ -26,15 +26,24 @@ namespace efsemop.Controllers
         // POST: SubAlcaldia/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Crear([Bind(Include = "IdSubAlcaldia,Nombre,Direccion,Zona,Telefono, NombreSubAlcalde")] SubAlcaldia subAlcaldia)
+        public async Task<ActionResult> Crear([Bind(Include = "Nombre,Direccion,Zona,Telefono, NombreSubAlcalde")] CreateSubAlcaldiaViewModel model)
         {
-            if (!ModelState.IsValid) return View(subAlcaldia);
+            if (!ModelState.IsValid) return View(model);
             using (var db = new AlcaldiaModelContainer())
             {
+                var subAlcaldia = new SubAlcaldia()
+                {
+                    Nombre = model.Nombre,
+                    Direccion = model.Direccion,
+                    Zona = model.Zona,
+                    Telefono = model.Telefono,
+                    NombreSubAlcalde = model.NombreSubAlcalde
+                };
                 db.SubAlcaldias.Add(subAlcaldia);
                 await db.SaveChangesAsync();
-            }
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }               
+                        
         }
     }
 }
