@@ -27,5 +27,7 @@ namespace efsemop.Framework.Pepemosca.Data
     
         public virtual DbSet<Persona> Personas { get; set; }
         public virtual DbSet<SubAlcaldia> SubAlcaldias { get; set; }
+        public virtual DbSet<Direccion> Direcciones { get; set; }
+        public virtual DbSet<Proyecto> Proyectos { get; set; }
     }
 }

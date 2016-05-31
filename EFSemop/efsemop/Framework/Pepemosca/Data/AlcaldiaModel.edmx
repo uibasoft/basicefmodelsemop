@@ -8,7 +8,13 @@
   <EntityContainer Name="AlcaldiaModelStoreContainer">
     <EntitySet Name="Personas" EntityType="AlcaldiaModel.Store.Personas" store:Type="Tables" Schema="core" />
     <EntitySet Name="SubAlcaldias" EntityType="AlcaldiaModel.Store.SubAlcaldias" store:Type="Tables" Schema="core" />
+    <EntitySet Name="Direcciones" EntityType="AlcaldiaModel.Store.Direcciones" store:Type="Tables" Schema="core" />
+    <EntitySet Name="Proyectos" EntityType="AlcaldiaModel.Store.Proyectos" store:Type="Tables" Schema="core" />
     <EntitySet Name="Personas_Responsable" EntityType="AlcaldiaModel.Store.Personas_Responsable" store:Type="Tables" Schema="core" />
+    <AssociationSet Name="DireccionProyectoBase" Association="AlcaldiaModel.Store.DireccionProyectoBase">
+      <End Role="Direccion" EntitySet="Direcciones" />
+      <End Role="Proyecto" EntitySet="Proyectos" />
+    </AssociationSet>
     <AssociationSet Name="FK_Responsable_inherits_Persona" Association="AlcaldiaModel.Store.FK_Responsable_inherits_Persona">
       <End Role="Persona" EntitySet="Personas" />
       <End Role="Responsable" EntitySet="Personas_Responsable" />
@@ -33,6 +39,26 @@
     <Property Name="Telefono" Type="varchar" Nullable="true" MaxLength="20" />
     <Property Name="NombreSubAlcalde" Type="nvarchar" Nullable="true" MaxLength="80" />
   </EntityType>
+  <EntityType Name="Direcciones">
+    <Key>
+      <PropertyRef Name="IdDireccion" />
+    </Key>
+    <Property Name="IdDireccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="CodigoInterno" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="Ubicacion" Type="nvarchar" Nullable="true" MaxLength="500" />
+  </EntityType>
+  <EntityType Name="Proyectos">
+    <Key>
+      <PropertyRef Name="IdProyecto" />
+    </Key>
+    <Property Name="IdProyecto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdDireccion" Type="int" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" Nullable="false" MaxLength="200" />
+    <Property Name="Descripcion" Type="nvarchar" Nullable="true" MaxLength="500" />
+    <Property Name="FechaCreacion" Type="datetime" Nullable="false" />
+    <Property Name="CostoEstimadoBs" Type="decimal" Nullable="true" Precision="12" Scale="3" />
+  </EntityType>
   <EntityType Name="Personas_Responsable">
     <Key>
       <PropertyRef Name="IdPersona" />
@@ -40,6 +66,20 @@
     <Property Name="FechaAsignacion" Type="datetime" Nullable="false" />
     <Property Name="IdPersona" Type="int" Nullable="false" />
   </EntityType>
+  <Association Name="DireccionProyectoBase">
+    <End Role="Direccion" Type="AlcaldiaModel.Store.Direcciones" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Proyecto" Type="AlcaldiaModel.Store.Proyectos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Direccion">
+        <PropertyRef Name="IdDireccion" />
+      </Principal>
+      <Dependent Role="Proyecto">
+        <PropertyRef Name="IdDireccion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Responsable_inherits_Persona">
     <End Role="Persona" Type="AlcaldiaModel.Store.Personas" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -61,6 +101,12 @@
         <EntityContainer Name="AlcaldiaModelContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Personas" EntityType="AlcaldiaModel.Persona" />
           <EntitySet Name="SubAlcaldias" EntityType="AlcaldiaModel.SubAlcaldia" />
+          <EntitySet Name="Direcciones" EntityType="AlcaldiaModel.Direccion" />
+          <EntitySet Name="Proyectos" EntityType="AlcaldiaModel.Proyecto" />
+          <AssociationSet Name="DireccionProyectoBase" Association="AlcaldiaModel.DireccionProyectoBase">
+            <End Role="Direccion" EntitySet="Direcciones" />
+            <End Role="Proyecto" EntitySet="Proyectos" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Persona">
           <Key>
@@ -84,6 +130,42 @@
           <Property Name="Telefono" Type="String" MaxLength="20" Nullable="true" Unicode="false" />
           <Property Name="NombreSubAlcalde" Type="String" Unicode="true" Nullable="true" MaxLength="80" />
         </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="IdDireccion" />
+          </Key>
+          <Property Name="IdDireccion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" Unicode="true" MaxLength="100" />
+          <Property Name="CodigoInterno" Type="String" Nullable="false" Unicode="false" MaxLength="50" />
+          <Property Name="Ubicacion" Type="String" Unicode="true" MaxLength="500" />
+          <NavigationProperty Name="Proyectos" Relationship="AlcaldiaModel.DireccionProyectoBase" FromRole="Direccion" ToRole="Proyecto" />
+        </EntityType>
+        <EntityType Name="Proyecto">
+          <Key>
+            <PropertyRef Name="IdProyecto" />
+          </Key>
+          <Property Name="IdProyecto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Direccion" Relationship="AlcaldiaModel.DireccionProyectoBase" FromRole="Proyecto" ToRole="Direccion" />
+          <Property Name="IdDireccion" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" Unicode="true" MaxLength="200" />
+          <Property Name="Descripcion" Type="String" Unicode="true" MaxLength="500" Nullable="true" />
+          <Property Name="FechaCreacion" Type="DateTime" Nullable="false" />
+          <Property Name="CostoEstimadoBs" Type="Decimal" Precision="12" Scale="3" />
+        </EntityType>
+        <Association Name="DireccionProyectoBase">
+          <End Type="AlcaldiaModel.Direccion" Role="Direccion" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="AlcaldiaModel.Proyecto" Role="Proyecto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="IdDireccion" />
+            </Principal>
+            <Dependent Role="Proyecto">
+              <PropertyRef Name="IdDireccion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -114,6 +196,28 @@
           <ScalarProperty Name="Zona" ColumnName="Zona" />
           <ScalarProperty Name="Telefono" ColumnName="Telefono" />
           <ScalarProperty Name="NombreSubAlcalde" ColumnName="NombreSubAlcalde" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Direcciones">
+      <EntityTypeMapping TypeName="IsTypeOf(AlcaldiaModel.Direccion)">
+        <MappingFragment StoreEntitySet="Direcciones">
+          <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="CodigoInterno" ColumnName="CodigoInterno" />
+          <ScalarProperty Name="Ubicacion" ColumnName="Ubicacion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Proyectos">
+      <EntityTypeMapping TypeName="IsTypeOf(AlcaldiaModel.Proyecto)">
+        <MappingFragment StoreEntitySet="Proyectos">
+          <ScalarProperty Name="IdProyecto" ColumnName="IdProyecto" />
+          <ScalarProperty Name="IdDireccion" ColumnName="IdDireccion" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+          <ScalarProperty Name="CostoEstimadoBs" ColumnName="CostoEstimadoBs" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

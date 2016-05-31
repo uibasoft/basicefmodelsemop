@@ -148,7 +148,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlcaldiaModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Framework\Pepemosca\Data\Direccion.cs">
+      <DependentUpon>AlcaldiaModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Framework\Pepemosca\Data\Persona.cs">
+      <DependentUpon>AlcaldiaModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Framework\Pepemosca\Data\Proyecto.cs">
       <DependentUpon>AlcaldiaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Framework\Pepemosca\Data\Responsable.cs">

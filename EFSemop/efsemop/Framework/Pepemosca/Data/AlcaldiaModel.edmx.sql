@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 05/31/2016 00:15:43
--- Generated from EDMX file: C:\Users\Luis Alberto\Source\Repos\basicefmodelsemop\EFSemop\efsemop\Framework\Pepemosca\Data\AlcaldiaModel.edmx
+-- Date Created: 05/31/2016 10:02:32
+-- Generated from EDMX file: C:\Users\lbaigorria.NEXOCORP\Source\Repos\basicefmodelsemop\EFSemop\efsemop\Framework\Pepemosca\Data\AlcaldiaModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -17,6 +17,9 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[core].[FK_DireccionProyectoBase]', 'F') IS NOT NULL
+    ALTER TABLE [core].[Proyectos] DROP CONSTRAINT [FK_DireccionProyectoBase];
+GO
 IF OBJECT_ID(N'[core].[FK_Responsable_inherits_Persona]', 'F') IS NOT NULL
     ALTER TABLE [core].[Personas_Responsable] DROP CONSTRAINT [FK_Responsable_inherits_Persona];
 GO
@@ -30,6 +33,12 @@ IF OBJECT_ID(N'[core].[Personas]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[core].[SubAlcaldias]', 'U') IS NOT NULL
     DROP TABLE [core].[SubAlcaldias];
+GO
+IF OBJECT_ID(N'[core].[Direcciones]', 'U') IS NOT NULL
+    DROP TABLE [core].[Direcciones];
+GO
+IF OBJECT_ID(N'[core].[Proyectos]', 'U') IS NOT NULL
+    DROP TABLE [core].[Proyectos];
 GO
 IF OBJECT_ID(N'[core].[Personas_Responsable]', 'U') IS NOT NULL
     DROP TABLE [core].[Personas_Responsable];
@@ -58,6 +67,26 @@ CREATE TABLE [core].[SubAlcaldias] (
 );
 GO
 
+-- Creating table 'Direcciones'
+CREATE TABLE [core].[Direcciones] (
+    [IdDireccion] int IDENTITY(1,1) NOT NULL,
+    [Nombre] nvarchar(100)  NOT NULL,
+    [CodigoInterno] varchar(50)  NOT NULL,
+    [Ubicacion] nvarchar(500)  NULL
+);
+GO
+
+-- Creating table 'Proyectos'
+CREATE TABLE [core].[Proyectos] (
+    [IdProyecto] int IDENTITY(1,1) NOT NULL,
+    [IdDireccion] int  NOT NULL,
+    [Nombre] nvarchar(200)  NOT NULL,
+    [Descripcion] nvarchar(500)  NULL,
+    [FechaCreacion] datetime  NOT NULL,
+    [CostoEstimadoBs] decimal(12,3)  NULL
+);
+GO
+
 -- Creating table 'Personas_Responsable'
 CREATE TABLE [core].[Personas_Responsable] (
     [FechaAsignacion] datetime  NOT NULL,
@@ -81,6 +110,18 @@ ADD CONSTRAINT [PK_SubAlcaldias]
     PRIMARY KEY CLUSTERED ([IdSubAlcaldia] ASC);
 GO
 
+-- Creating primary key on [IdDireccion] in table 'Direcciones'
+ALTER TABLE [core].[Direcciones]
+ADD CONSTRAINT [PK_Direcciones]
+    PRIMARY KEY CLUSTERED ([IdDireccion] ASC);
+GO
+
+-- Creating primary key on [IdProyecto] in table 'Proyectos'
+ALTER TABLE [core].[Proyectos]
+ADD CONSTRAINT [PK_Proyectos]
+    PRIMARY KEY CLUSTERED ([IdProyecto] ASC);
+GO
+
 -- Creating primary key on [IdPersona] in table 'Personas_Responsable'
 ALTER TABLE [core].[Personas_Responsable]
 ADD CONSTRAINT [PK_Personas_Responsable]
@@ -90,6 +131,21 @@ GO
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
+
+-- Creating foreign key on [IdDireccion] in table 'Proyectos'
+ALTER TABLE [core].[Proyectos]
+ADD CONSTRAINT [FK_DireccionProyectoBase]
+    FOREIGN KEY ([IdDireccion])
+    REFERENCES [core].[Direcciones]
+        ([IdDireccion])
+    ON DELETE CASCADE ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_DireccionProyectoBase'
+CREATE INDEX [IX_FK_DireccionProyectoBase]
+ON [core].[Proyectos]
+    ([IdDireccion]);
+GO
 
 -- Creating foreign key on [IdPersona] in table 'Personas_Responsable'
 ALTER TABLE [core].[Personas_Responsable]

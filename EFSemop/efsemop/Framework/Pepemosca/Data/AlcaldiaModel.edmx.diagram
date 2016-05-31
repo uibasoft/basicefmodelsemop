@@ -5,10 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="46bad34736074a3e8b504363fa0de9c2" Name="Diagram1" >
-        <EntityTypeShape EntityType="AlcaldiaModel.Persona" Width="1.5" PointX="2.625" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="AlcaldiaModel.Responsable" Width="1.5" PointX="2.625" PointY="4.625" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Persona" Width="1.5" PointX="3" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Responsable" Width="1.5" PointX="3" PointY="2.75" />
         <InheritanceConnector EntityType="AlcaldiaModel.Responsable" />
-        <EntityTypeShape EntityType="AlcaldiaModel.SubAlcaldia" Width="2" PointX="6" PointY="2.375" />
+        <EntityTypeShape EntityType="AlcaldiaModel.SubAlcaldia" Width="2" PointX="0.5" PointY="2.625" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Direccion" Width="1.5" PointX="9.125" PointY="0.625" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Proyecto" Width="2.125" PointX="5.75" PointY="1.125" />
+        <AssociationConnector Association="AlcaldiaModel.DireccionProyectoBase" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
