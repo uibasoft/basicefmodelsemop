@@ -31,6 +31,8 @@ namespace efsemop
 
             #region Custom Bundle & Minifications
 
+            bundles.Add(new StyleBundle("~/bundles/core/subalcaldia/css").Include(
+           "~/Content/PagedList.css"));
 
 
             #endregion
