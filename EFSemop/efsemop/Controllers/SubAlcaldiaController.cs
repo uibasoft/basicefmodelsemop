@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using efsemop.Framework.Pepemosca.Data;
@@ -88,6 +91,65 @@ namespace efsemop.Controllers
                 return RedirectToAction("Index");
             }               
                         
+        }
+
+        // GET: SubAlcaldia/Eliminar/5
+        public async Task<ActionResult> Eliminar(int? id, bool? concurrencyError)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            using (var db = new AlcaldiaModelContainer())
+            {
+                var subAlcaldia = await db.SubAlcaldias.FindAsync(id);
+                if (subAlcaldia == null)
+                {
+                    if (concurrencyError.GetValueOrDefault())
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    return HttpNotFound();
+                }
+
+                if (concurrencyError.GetValueOrDefault())
+                {
+                    ViewBag.ConcurrencyErrorMessage = "El registro que intentó eliminar fue modificado por otro usuario después de consultar " +
+                                                      "los valores originales. " +
+                                                      "La operación de eliminación fue cancelada y los valores actuales se han vuelto a " +
+                                                      "cargar. Si aún desea eliminar este registro, haga clic en el botón " +
+                                                      "Eliminar de nuevo. De lo contrario Haga clic en el hipervínculo Cancelar.";
+                }
+                return View(subAlcaldia);
+            }          
+        }
+
+        // POST: SubAlcaldia/Eliminar/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Eliminar(SubAlcaldia subAlcaldia)
+        {
+            try
+            {
+                using (var db = new AlcaldiaModelContainer())
+                {
+                    db.Entry(subAlcaldia).State = EntityState.Deleted;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+             
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return RedirectToAction("Eliminar", new { concurrencyError = true, id = subAlcaldia.IdSubAlcaldia });
+            }
+            catch (DataException )
+            {
+                //Log the error
+                ModelState.AddModelError(string.Empty, "No se puede eliminar. Inténtelo de nuevo, y si el problema " +
+                                                       "persiste pongase con el administrador del sistema.");
+                return View(subAlcaldia);
+            }
         }
     }
 }

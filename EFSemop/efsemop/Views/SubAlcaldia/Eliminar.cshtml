@@ -1,0 +1,51 @@
+﻿@model efsemop.Framework.Pepemosca.Data.SubAlcaldia
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminar</h2>
+
+<p class="error">@ViewBag.ConcurrencyErrorMessage</p>
+
+<h3>Está seguro de eliminar el elemento?</h3>
+<div>
+    <h4>Sub Alcaldia</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Responsable
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreSubAlcalde)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Direccion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Zona)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.IdSubAlcaldia)
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Cancelar", "Index")
+        </div>
+    }
+</div>
