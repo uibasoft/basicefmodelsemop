@@ -61,12 +61,12 @@ namespace efsemop.Controllers
                 var pageNumber = (page ?? 1);
                 return View(list.ToPagedList(pageNumber, pageSize));
 
-            }         
+            }
         }
 
         // GET: SubAlcaldia/Crear
         public ActionResult Crear()
-        {                        
+        {
             return View();
         }
 
@@ -89,8 +89,8 @@ namespace efsemop.Controllers
                 db.SubAlcaldias.Add(subAlcaldia);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
-            }               
-                        
+            }
+
         }
 
         // GET: SubAlcaldia/Eliminar/5
@@ -121,7 +121,7 @@ namespace efsemop.Controllers
                                                       "Eliminar de nuevo. De lo contrario Haga clic en el hipervínculo Cancelar.";
                 }
                 return View(subAlcaldia);
-            }          
+            }
         }
 
         // POST: SubAlcaldia/Eliminar/5
@@ -137,13 +137,13 @@ namespace efsemop.Controllers
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-             
+
             }
             catch (DbUpdateConcurrencyException)
             {
                 return RedirectToAction("Eliminar", new { concurrencyError = true, id = subAlcaldia.IdSubAlcaldia });
             }
-            catch (DataException )
+            catch (DataException)
             {
                 //Log the error
                 ModelState.AddModelError(string.Empty, "No se puede eliminar. Inténtelo de nuevo, y si el problema persiste pongase con el administrador del sistema.");
@@ -168,7 +168,7 @@ namespace efsemop.Controllers
                     return HttpNotFound();
                 }
                 return View(subAlcaldia);
-            }          
+            }
         }
 
         // POST: SubAlcaldia/Editar/5
@@ -183,64 +183,58 @@ namespace efsemop.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             SubAlcaldia subAlcaldiaToUpdate;
-            // Contexto
             using (var db = new AlcaldiaModelContainer())
             {
                 subAlcaldiaToUpdate = await db.SubAlcaldias.FindAsync(id);
-            }           
-            if (subAlcaldiaToUpdate == null)
-            {
-                var deletedSubAlcaldia = new SubAlcaldia();
-                TryUpdateModel(deletedSubAlcaldia, fieldsToBind);
-                ModelState.AddModelError(string.Empty, "Imposible guardar los cambios. El elemento fué eliminado por otro usuario.");
-                return View(deletedSubAlcaldia);
-            }
-            if (!TryUpdateModel(subAlcaldiaToUpdate, fieldsToBind)) return View(subAlcaldiaToUpdate);
-            try
-            {
-                // Contexto
-                using (var db = new AlcaldiaModelContainer())
+                if (subAlcaldiaToUpdate == null)
+                {
+                    var deletedSubAlcaldia = new SubAlcaldia();
+                    TryUpdateModel(deletedSubAlcaldia, fieldsToBind);
+                    ModelState.AddModelError(string.Empty, "Imposible guardar los cambios. El elemento fué eliminado por otro usuario.");
+                    return View(deletedSubAlcaldia);
+                }
+                if (!TryUpdateModel(subAlcaldiaToUpdate, fieldsToBind)) return View(subAlcaldiaToUpdate);
+                try
                 {
                     await db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-              
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                var entry = ex.Entries.Single();
-                var clientValues = (SubAlcaldia)entry.Entity;
-                var databaseEntry = entry.GetDatabaseValues();
-                if (databaseEntry == null)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    ModelState.AddModelError(string.Empty, "Imposible guardar los cambios. El elemento fué eliminado por otro usuario.");
-                }
-                else
-                {
-                    var databaseValues = (SubAlcaldia)databaseEntry.ToObject();
+                    var entry = ex.Entries.Single();
+                    var clientValues = (SubAlcaldia)entry.Entity;
+                    var databaseEntry = entry.GetDatabaseValues();
+                    if (databaseEntry == null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Imposible guardar los cambios. El elemento fué eliminado por otro usuario.");
+                    }
+                    else
+                    {
+                        var databaseValues = (SubAlcaldia)databaseEntry.ToObject();
 
-                    if (databaseValues.Nombre != clientValues.Nombre)
-                        ModelState.AddModelError("Nombre", "Nombre valor: "
-                                                           + databaseValues.Nombre);
-                    if (databaseValues.Direccion != clientValues.Direccion)
-                        ModelState.AddModelError("Direccion", "Direccion valor: "
-                                                              + databaseValues.Nombre);
-                    if (databaseValues.Zona != clientValues.Zona)
-                        ModelState.AddModelError("Zona", "Zona valor: "
-                                                         + databaseValues.Zona);
-                    if (databaseValues.Telefono != clientValues.Telefono)
-                        ModelState.AddModelError("Telefono", "Telefono valor: "
-                                                             + databaseValues.Telefono);
-                    if (databaseValues.NombreSubAlcalde != clientValues.NombreSubAlcalde)
-                        ModelState.AddModelError("NombreSubAlcalde", "NombreSubAlcalde valor: "
-                                                                     + databaseValues.NombreSubAlcalde);
-                    ModelState.AddModelError(string.Empty, "El registro que está intentado modificar, fue eliminado por otro usuario después de consultar " +
-                                                      "los valores originales. La operación de edición fue cancelada.");
+                        if (databaseValues.Nombre != clientValues.Nombre)
+                            ModelState.AddModelError("Nombre", "Nombre valor: "
+                                                               + databaseValues.Nombre);
+                        if (databaseValues.Direccion != clientValues.Direccion)
+                            ModelState.AddModelError("Direccion", "Direccion valor: "
+                                                                  + databaseValues.Nombre);
+                        if (databaseValues.Zona != clientValues.Zona)
+                            ModelState.AddModelError("Zona", "Zona valor: "
+                                                             + databaseValues.Zona);
+                        if (databaseValues.Telefono != clientValues.Telefono)
+                            ModelState.AddModelError("Telefono", "Telefono valor: "
+                                                                 + databaseValues.Telefono);
+                        if (databaseValues.NombreSubAlcalde != clientValues.NombreSubAlcalde)
+                            ModelState.AddModelError("NombreSubAlcalde", "NombreSubAlcalde valor: "
+                                                                         + databaseValues.NombreSubAlcalde);
+                        ModelState.AddModelError(string.Empty, "El registro que está intentado modificar, fue eliminado por otro usuario después de consultar " +
+                                                          "los valores originales. La operación de edición fue cancelada.");
+                    }
                 }
-            }
-            catch (RetryLimitExceededException)
-            {
-                ModelState.AddModelError("", "No se puede editar. Inténtelo de nuevo, y si el problema persiste pongase con el administrador del sistema.");
+                catch (RetryLimitExceededException)
+                {
+                    ModelState.AddModelError("", "No se puede editar. Inténtelo de nuevo, y si el problema persiste pongase con el administrador del sistema.");
+                }               
             }
             return View(subAlcaldiaToUpdate);
         }
