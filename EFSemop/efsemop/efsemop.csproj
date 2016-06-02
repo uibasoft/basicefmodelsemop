@@ -226,6 +226,7 @@
     <Content Include="Views\SubAlcaldia\Crear.cshtml" />
     <Content Include="Scripts\jquery-2.2.3.min.map" />
     <Content Include="Views\SubAlcaldia\Eliminar.cshtml" />
+    <Content Include="Views\SubAlcaldia\Editar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
