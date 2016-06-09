@@ -14,7 +14,6 @@ namespace efsemop.Framework.Pepemosca.Data
     
     public partial class SubAlcaldia
     {
-       
         public int IdSubAlcaldia { get; set; }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
