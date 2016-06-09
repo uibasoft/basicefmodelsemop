@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using efsemop.Framework.Pepemosca.Data;
+using efsemop.Framework.Pepemosca.Domain;
 using efsemop.Models.ViewModels.SubAlcaldia;
 using PagedList;
 
@@ -16,25 +17,20 @@ namespace efsemop.Controllers
     public class SubAlcaldiaController : Controller
     {
         private readonly AlcaldiaModelContainer _db;
-
+        protected readonly IRepoSubAlcaldia RepoSubAlcaldia;
         public SubAlcaldiaController()
         {
             _db = new AlcaldiaModelContainer();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                _db.Dispose();
+            RepoSubAlcaldia = new RepoSubAlcaldia();
         }
 
         // GET: SubAlcaldia
         public ActionResult Index(string texto, string sortOrder, string currentFilter, int? page)
         {
+            var pageSize = 3;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NombreSortParm = string.IsNullOrEmpty(sortOrder) ? "nombre_desc" : string.Empty;
             ViewBag.ZonaSortParm = sortOrder == "Zona" ? "zona_desc" : "Zona";
-
             if (!string.IsNullOrWhiteSpace(texto))
             {
                 page = 1;
@@ -43,34 +39,10 @@ namespace efsemop.Controllers
             {
                 texto = currentFilter;
             }
-
             ViewBag.CurrentFilter = texto;
-
-            var list = from ele in _db.SubAlcaldias
-                       select ele;
-
-            if (!string.IsNullOrEmpty(texto))
-            {
-                list = list.Where(s => s.Nombre.Contains(texto) || s.Direccion.Contains(texto));
-            }
-            switch (sortOrder)
-            {
-                case "nombre_desc":
-                    list = list.OrderByDescending(s => s.Nombre);
-                    break;
-                case "Zona":
-                    list = list.OrderBy(s => s.Zona);
-                    break;
-                case "zona_desc":
-                    list = list.OrderByDescending(s => s.Zona);
-                    break;
-                default:
-                    list = list.OrderBy(s => s.Nombre);
-                    break;
-            }
-            var pageSize = 3;
-            var pageNumber = (page ?? 1);
-            return View(list.ToPagedList(pageNumber, pageSize));
+            var pageIndex = (page ?? 1);
+            var result = RepoSubAlcaldia.Busqueda(texto, sortOrder, pageIndex, pageSize);
+            return View(result);
         }
 
         // GET: SubAlcaldia/Crear
@@ -85,7 +57,6 @@ namespace efsemop.Controllers
         public async Task<ActionResult> Crear([Bind(Include = "Nombre,Direccion,Zona,Telefono, NombreSubAlcalde")] CreateSubAlcaldiaViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
             var subAlcaldia = new SubAlcaldia()
             {
                 Nombre = model.Nombre,
@@ -94,11 +65,8 @@ namespace efsemop.Controllers
                 Telefono = model.Telefono,
                 NombreSubAlcalde = model.NombreSubAlcalde
             };
-            _db.SubAlcaldias.Add(subAlcaldia);
-            await _db.SaveChangesAsync();
+            var result = await RepoSubAlcaldia.Crear(subAlcaldia);
             return RedirectToAction("Index");
-
-
         }
 
         // GET: SubAlcaldia/Eliminar/5
@@ -108,8 +76,7 @@ namespace efsemop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var subAlcaldia = await _db.SubAlcaldias.FindAsync(id);
+            var subAlcaldia = await RepoSubAlcaldia.Obtener(id.Value);
             if (subAlcaldia == null)
             {
                 if (concurrencyError.GetValueOrDefault())
@@ -118,7 +85,6 @@ namespace efsemop.Controllers
                 }
                 return HttpNotFound();
             }
-
             if (concurrencyError.GetValueOrDefault())
             {
                 ViewBag.ConcurrencyErrorMessage = "El registro que intentó eliminar fue modificado por otro usuario después de consultar " +
@@ -137,9 +103,8 @@ namespace efsemop.Controllers
         public async Task<ActionResult> Eliminar(SubAlcaldia subAlcaldia)
         {
             try
-            {
-                _db.Entry(subAlcaldia).State = EntityState.Deleted;
-                await _db.SaveChangesAsync();
+            {                
+                var result = await RepoSubAlcaldia.Eliminar(subAlcaldia.IdSubAlcaldia);
                 return RedirectToAction("Index");
             }
             catch (DbUpdateConcurrencyException)
@@ -236,6 +201,14 @@ namespace efsemop.Controllers
             }
 
             return View(subAlcaldiaToUpdate);
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                RepoSubAlcaldia.Dispose();
+                _db.Dispose();
+            }
         }
 
     }
