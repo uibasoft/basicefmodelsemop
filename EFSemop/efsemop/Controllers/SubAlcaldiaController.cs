@@ -128,7 +128,7 @@ namespace efsemop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var subAlcaldia = await _db.SubAlcaldias.FindAsync(id);
+            var subAlcaldia = await RepoSubAlcaldia.Obtener(id.Value);
             if (subAlcaldia == null)
             {
                 return HttpNotFound();

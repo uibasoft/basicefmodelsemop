@@ -9,7 +9,7 @@ using PagedList;
 
 namespace efsemop.Framework.Pepemosca.Data
 {
-    public class RepoSubAlcaldia : IRepoSubAlcaldia, IDisposable
+    public class RepoSubAlcaldia : IRepoSubAlcaldia
     {
         private AlcaldiaModelContainer _db;
 
@@ -99,6 +99,11 @@ namespace efsemop.Framework.Pepemosca.Data
                 // Logger
             }
             return result;
+        }
+
+        public Task<SubAlcaldia> Editar(SubAlcaldia dto)
+        {
+            throw new NotImplementedException();
         }
 
         protected void Dispose(bool disposing)

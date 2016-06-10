@@ -14,5 +14,6 @@ namespace efsemop.Framework.Pepemosca.Domain
         Task<int> Crear(SubAlcaldia dto);
         Task<int> Eliminar(int id);
         Task<SubAlcaldia> Obtener(int id);
+        Task<SubAlcaldia> Editar(SubAlcaldia dto);
     }
 }
