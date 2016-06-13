@@ -16,18 +16,16 @@ namespace efsemop.Controllers
 {
     public class SubAlcaldiaController : Controller
     {
-        private readonly AlcaldiaModelContainer _db;
         protected readonly IRepoSubAlcaldia RepoSubAlcaldia;
         public SubAlcaldiaController()
         {
-            _db = new AlcaldiaModelContainer();
             RepoSubAlcaldia = new RepoSubAlcaldia();
         }
 
         // GET: SubAlcaldia
         public ActionResult Index(string texto, string sortOrder, string currentFilter, int? page)
         {
-            var pageSize = 3;
+            var pageSize = 5;
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NombreSortParm = string.IsNullOrEmpty(sortOrder) ? "nombre_desc" : string.Empty;
             ViewBag.ZonaSortParm = sortOrder == "Zona" ? "zona_desc" : "Zona";
@@ -103,7 +101,7 @@ namespace efsemop.Controllers
         public async Task<ActionResult> Eliminar(SubAlcaldia subAlcaldia)
         {
             try
-            {                
+            {
                 var result = await RepoSubAlcaldia.Eliminar(subAlcaldia.IdSubAlcaldia);
                 return RedirectToAction("Index");
             }
@@ -119,8 +117,6 @@ namespace efsemop.Controllers
             }
         }
 
-
-
         // GET: SubAlcaldia/Editar/5
         public async Task<ActionResult> Editar(int? id)
         {
@@ -128,7 +124,7 @@ namespace efsemop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var subAlcaldia = await _db.SubAlcaldias.FindAsync(id);
+            var subAlcaldia = await RepoSubAlcaldia.Obtener(id.Value);
             if (subAlcaldia == null)
             {
                 return HttpNotFound();
@@ -147,9 +143,7 @@ namespace efsemop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SubAlcaldia subAlcaldiaToUpdate;
-
-            subAlcaldiaToUpdate = await _db.SubAlcaldias.FindAsync(id);
+            var subAlcaldiaToUpdate = await RepoSubAlcaldia.Obtener(id.Value);
             if (subAlcaldiaToUpdate == null)
             {
                 var deletedSubAlcaldia = new SubAlcaldia();
@@ -160,7 +154,8 @@ namespace efsemop.Controllers
             if (!TryUpdateModel(subAlcaldiaToUpdate, fieldsToBind)) return View(subAlcaldiaToUpdate);
             try
             {
-                await _db.SaveChangesAsync();
+                var res = await RepoSubAlcaldia.Editar(subAlcaldiaToUpdate);
+                //subAlcaldiaToUpdate = res;
                 return RedirectToAction("Index");
             }
             catch (DbUpdateConcurrencyException ex)
@@ -207,7 +202,6 @@ namespace efsemop.Controllers
             if (disposing)
             {
                 RepoSubAlcaldia.Dispose();
-                _db.Dispose();
             }
         }
 

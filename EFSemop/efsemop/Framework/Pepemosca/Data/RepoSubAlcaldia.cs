@@ -101,6 +101,29 @@ namespace efsemop.Framework.Pepemosca.Data
             return result;
         }
 
+        public async Task<SubAlcaldia> Editar(SubAlcaldia dto)
+        {
+            SubAlcaldia result = null;
+            try
+            {
+                if (dto == null)
+                    return result;
+                var entity = await _db.SubAlcaldias.FindAsync(dto.IdSubAlcaldia);
+                entity.Nombre = dto.Nombre;
+                entity.Direccion = dto.Direccion;
+                entity.Zona = dto.Zona;
+                entity.Telefono = dto.Telefono;
+                entity.NombreSubAlcalde = dto.NombreSubAlcalde;
+                var rest = await _db.SaveChangesAsync();
+                result = entity;
+            }
+            catch (Exception ex)
+            {
+                // Logger
+            }
+            return result;
+        }
+
         protected void Dispose(bool disposing)
         {
             if (!disposing) return;

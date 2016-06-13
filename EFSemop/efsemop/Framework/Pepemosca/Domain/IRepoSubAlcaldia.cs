@@ -11,8 +11,9 @@ namespace efsemop.Framework.Pepemosca.Domain
     public interface IRepoSubAlcaldia : IDisposable
     {
         IPagedList<SubAlcaldia> Busqueda(string texto, string sortOrder, int pageIndex, int pageSize);
-        Task<int> Crear(SubAlcaldia dto);
+        Task<int> Crear(SubAlcaldia dto);        
         Task<int> Eliminar(int id);
         Task<SubAlcaldia> Obtener(int id);
+        Task<SubAlcaldia> Editar(SubAlcaldia dto);
     }
 }
