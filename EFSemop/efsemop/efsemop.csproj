@@ -193,6 +193,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AlcaldiaModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Framework\Pepemosca\Data\BasicDependencyResolver.cs" />
     <Compile Include="Framework\Pepemosca\Data\Direccion.cs">
       <DependentUpon>AlcaldiaModel.tt</DependentUpon>
     </Compile>
