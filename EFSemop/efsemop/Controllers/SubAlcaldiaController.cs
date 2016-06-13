@@ -17,9 +17,11 @@ namespace efsemop.Controllers
     public class SubAlcaldiaController : Controller
     {
         protected readonly IRepoSubAlcaldia RepoSubAlcaldia;
-        public SubAlcaldiaController()
+        public SubAlcaldiaController(IRepoSubAlcaldia pRepoSubAlcaldia)
         {
-            RepoSubAlcaldia = new RepoSubAlcaldia();
+            if (pRepoSubAlcaldia == null)
+                throw new ArgumentNullException(nameof(pRepoSubAlcaldia));
+            RepoSubAlcaldia = pRepoSubAlcaldia;
         }
 
         // GET: SubAlcaldia
