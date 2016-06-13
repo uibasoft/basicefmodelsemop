@@ -38,7 +38,7 @@ namespace efsemop.App_Start
             // container.LoadConfiguration();
 
             // TODO: Register your types here
-            container.RegisterType<IRepoSubAlcaldia, RepoSubAlcaldia>();
+            container.RegisterType<IRepoSubAlcaldia, RepoSubAlcaldia>(new PerRequestLifetimeManager());
         }
     }
 }

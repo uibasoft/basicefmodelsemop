@@ -199,13 +199,6 @@ namespace efsemop.Controllers
 
             return View(subAlcaldiaToUpdate);
         }
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                RepoSubAlcaldia.Dispose();
-            }
-        }
 
     }
 }
