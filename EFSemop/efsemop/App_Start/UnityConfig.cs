@@ -39,6 +39,15 @@ namespace efsemop.App_Start
 
             // TODO: Register your types here
             container.RegisterType<IRepoSubAlcaldia, RepoSubAlcaldia>(new PerRequestLifetimeManager());
+
+            //http://unity.codeplex.com/
+
+            //container.RegisterTypes(
+            //    AllClasses.FromAssemblies(typeof(MvcApplication).Assembly),
+            //    WithMappings.FromMatchingInterface,
+            //    WithName.Default,
+            //    WithLifetime.Custom<PerRequestLifetimeManager>
+            //);
         }
     }
 }
