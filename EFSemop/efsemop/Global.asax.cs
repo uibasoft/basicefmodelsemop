@@ -17,8 +17,6 @@ namespace efsemop
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            // Personalizado
-            DependencyResolver.SetResolver(new BasicDependencyResolver());
         }
     }
 }
