@@ -2,13 +2,13 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 06/10/2016 14:53:00
--- Generated from EDMX file: C:\Users\lbaigorria.NEXOCORP\Source\Repos\basicefmodelsemop\EFSemop\efsemop\Framework\Pepemosca\Data\AlcaldiaModel.edmx
+-- Date Created: 08/31/2016 15:45:48
+-- Generated from EDMX file: D:\Alberto\apps\basicefmodelsemop\EFSemop\efsemop\Framework\Pepemosca\Data\AlcaldiaModel.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
 GO
-USE [AlcaldiaModel];
+USE [DEMO];
 GO
 IF SCHEMA_ID(N'core') IS NULL EXECUTE(N'CREATE SCHEMA [core]');
 GO
