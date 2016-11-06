@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="46bad34736074a3e8b504363fa0de9c2" Name="Diagram1" >
+        <EntityTypeShape EntityType="AlcaldiaModel.Persona" Width="1.5" PointX="0.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Responsable" Width="1.5" PointX="2.875" PointY="1.75" />
+        <InheritanceConnector EntityType="AlcaldiaModel.Responsable" />
+        <EntityTypeShape EntityType="AlcaldiaModel.SubAlcaldia" Width="2" PointX="0.5" PointY="4" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Direccion" Width="1.5" PointX="5.25" PointY="0.5" />
+        <EntityTypeShape EntityType="AlcaldiaModel.Proyecto" Width="2.125" PointX="2.75" PointY="4" />
+        <AssociationConnector Association="AlcaldiaModel.DireccionProyectoBase" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
